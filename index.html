@@ -445,6 +445,14 @@
       .gallery-dialog-close { top: 15px; right: 15px; }
     }
 
+  
+    .voice-preview-panel { margin-top: 16px; padding: 15px 16px; border: 1px solid rgba(214,190,136,.28); background: rgba(255,253,247,.035); }
+    .voice-preview-title { margin: 0 0 10px; color: rgba(255,253,247,.8); font-size: .78rem; }
+    .voice-preview-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+    .voice-preview-button { padding: 8px 11px; border: 1px solid rgba(214,190,136,.55); background: transparent; color: #e4d6b7; font: inherit; font-size: .78rem; cursor: pointer; }
+    .voice-preview-button:hover, .voice-preview-button:focus-visible, .voice-preview-button[aria-pressed="true"] { background: rgba(214,190,136,.16); border-color: #d6be88; color: #fffdf7; }
+    .voice-preview-note { margin: 9px 0 0; color: rgba(255,253,247,.58); font-size: .72rem; line-height: 1.5; }
+
   </style>
 </head>
 <body>
@@ -480,6 +488,15 @@
             <button class="btn btn-outline share-site-button" id="share-site-top" data-status-target="#share-status-top" type="button">↗ Поделиться сайтом</button>
           </div>
           <p class="audio-status" id="audio-status" aria-live="polite"></p>
+          <div class="voice-preview-panel" aria-label="Примеры голосов">
+            <p class="voice-preview-title">Попробуй, как будет звучать рассказ:</p>
+            <div class="voice-preview-buttons">
+              <button class="voice-preview-button" type="button" data-voice-mode="female" aria-pressed="false">Женский голос ▶</button>
+              <button class="voice-preview-button" type="button" data-voice-mode="male" aria-pressed="false">Мужской голос ▶</button>
+              <button class="voice-preview-button" type="button" data-voice-mode="narrator" aria-pressed="true">Голос диктора ▶</button>
+            </div>
+            <p class="voice-preview-note">Нажми на вариант, чтобы услышать короткий пример. После выбора кнопка «Послушать биографию» будет использовать этот стиль. Доступные тембры зависят от браузера и устройства.</p>
+          </div>
           <p class="share-status" id="share-status-top" aria-live="polite"></p>
         </div>
        <figure class="portrait-frame">
@@ -858,10 +875,59 @@
 
   <script>
     (() => {
-      // Озвучивание краткой биографии с помощью встроенного синтеза речи браузера.
+      // Озвучивание и прослушивание вариантов голоса браузера.
       const listenButton = document.querySelector('#listen-biography');
       const audioStatus = document.querySelector('#audio-status');
+      const voicePreviewButtons = Array.from(document.querySelectorAll('.voice-preview-button'));
+      let selectedVoiceMode = 'narrator';
       const biographyNarration = 'Зоя Анатольевна Космодемьянская родилась 13 сентября 1923 года. Она была советской разведчицей-диверсанткой во время Великой Отечественной войны. Осенью 1941 года Зоя выполняла задание в тылу немецких войск. Её схватили в деревне Петрищево, а 29 ноября 1941 года казнили. 16 февраля 1942 года Зое Космодемьянской посмертно присвоили звание Героя Советского Союза. Память о её жизни и судьбе сохраняется в музеях, документах и семейных рассказах.';
+      const voicePreviewText = 'Зоя Космодемьянская. Мы помним её мужество и сохраняем историю для будущих поколений.';
+      const voiceProfiles = {
+        female: { rate: 0.94, pitch: 1.12, names: /female|irina|elena|anna|milena|svetlana|darina|natasha|yulia|julia|katya|olga|алла/i },
+        male: { rate: 0.90, pitch: 0.82, names: /male|pavel|paul|dmitri|dmitry|yuri|yuriy|alexander|alexandr|maxim|sergey|sergei|nikolai|ivan|boris/i },
+        narrator: { rate: 0.82, pitch: 0.93, names: /male|pavel|paul|dmitri|dmitry|yuri|yuriy|alexander|alexandr|maxim|sergey|sergei|nikolai|ivan|boris/i }
+      };
+      function buildRussianSpeech(text, mode) {
+        const profile = voiceProfiles[mode] || voiceProfiles.narrator;
+        const speech = new SpeechSynthesisUtterance(text);
+        speech.lang = 'ru-RU';
+        speech.rate = profile.rate;
+        speech.pitch = profile.pitch;
+        const voices = window.speechSynthesis.getVoices();
+        const russianVoices = voices.filter(voice => /^ru(?:-|_|$)/i.test(voice.lang));
+        const preferredVoice = russianVoices.find(voice => profile.names.test(voice.name))
+          || (mode === 'narrator' ? russianVoices.find(voice => voiceProfiles.male.names.test(voice.name)) : null)
+          || russianVoices[0]
+          || voices.find(voice => /^ru/i.test(voice.lang));
+        if (preferredVoice) speech.voice = preferredVoice;
+        return speech;
+      }
+      function stopCurrentSpeech() {
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        listenButton.textContent = '▶ Послушать биографию';
+        voicePreviewButtons.forEach(button => {
+          button.textContent = button.dataset.voiceMode === selectedVoiceMode
+            ? button.dataset.voiceMode === 'female' ? 'Женский голос ✓' : button.dataset.voiceMode === 'male' ? 'Мужской голос ✓' : 'Голос диктора ✓'
+            : button.dataset.voiceMode === 'female' ? 'Женский голос ▶' : button.dataset.voiceMode === 'male' ? 'Мужской голос ▶' : 'Голос диктора ▶';
+        });
+      }
+      voicePreviewButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+            audioStatus.textContent = 'Озвучивание не поддерживается этим браузером. Попробуй открыть сайт в другом браузере.';
+            return;
+          }
+          stopCurrentSpeech();
+          selectedVoiceMode = button.dataset.voiceMode;
+          voicePreviewButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+          stopCurrentSpeech();
+          const sample = buildRussianSpeech(voicePreviewText, selectedVoiceMode);
+          sample.onstart = () => { audioStatus.textContent = 'Пример голоса: ' + (selectedVoiceMode === 'female' ? 'женский' : selectedVoiceMode === 'male' ? 'мужской' : 'дикторский') + '.'; };
+          sample.onend = () => { audioStatus.textContent = 'Этот стиль выбран для прослушивания полной биографии.'; };
+          sample.onerror = () => { audioStatus.textContent = 'Не удалось воспроизвести голос. Проверь звук и доступные голоса в браузере.'; };
+          window.speechSynthesis.speak(sample);
+        });
+      });
       listenButton.addEventListener('click', () => {
         if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
           audioStatus.textContent = 'Озвучивание не поддерживается этим браузером. Попробуй открыть сайт в другом браузере.';
@@ -873,11 +939,7 @@
           audioStatus.textContent = 'Рассказ остановлен.';
           return;
         }
-        const speech = new SpeechSynthesisUtterance(biographyNarration);
-        speech.lang = 'ru-RU';
-        speech.rate = 0.92;
-        const russianVoice = window.speechSynthesis.getVoices().find(voice => /^ru(?:-|_)/i.test(voice.lang));
-        if (russianVoice) speech.voice = russianVoice;
+        const speech = buildRussianSpeech(biographyNarration, selectedVoiceMode);
         speech.onstart = () => {
           listenButton.textContent = '■ Остановить рассказ';
           audioStatus.textContent = 'Сейчас звучит краткая биография Зои.';
