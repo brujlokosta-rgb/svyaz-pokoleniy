@@ -402,7 +402,50 @@
     font-size: 0.78rem;
   }
 }
-</style>
+
+    /* Галерея архивных материалов */
+    .gallery-section { background: #f2eee5; }
+    .gallery-heading { display: grid; grid-template-columns: 1fr .9fr; gap: 28px; align-items: end; margin-bottom: 32px; }
+    .gallery-heading h2 { margin-bottom: 0; }
+    .gallery-heading .section-lead { margin-bottom: 3px; }
+    .archive-gallery-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .gallery-card { min-width: 0; background: #fbf8f0; border: 1px solid rgba(32,43,40,.15); }
+    .gallery-open { display: block; width: 100%; padding: 0; border: 0; background: transparent; color: inherit; text-align: left; cursor: zoom-in; }
+    .gallery-open img { display: block; width: 100%; height: 250px; object-fit: cover; filter: grayscale(1) sepia(.1); transition: filter .25s ease, transform .25s ease; }
+    .gallery-open:hover img, .gallery-open:focus-visible img { filter: grayscale(.35) sepia(.1); }
+    .gallery-open:focus-visible { outline: 3px solid #a67e3a; outline-offset: 3px; }
+    .gallery-caption { display: block; padding: 16px 18px 6px; font-family: Georgia, serif; font-size: 1.18rem; }
+    .gallery-description { display: block; padding: 0 18px 18px; color: #68736d; font-size: .82rem; line-height: 1.5; }
+    .gallery-credit { padding: 0 18px 16px; font-size: .76rem; }
+    .gallery-credit a { color: #496258; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    .gallery-dialog { position: relative; width: min(900px, calc(100% - 28px)); max-width: none; max-height: 92vh; padding: 18px; border: 1px solid rgba(214,190,136,.65); background: #18342f; color: #fffdf7; box-shadow: 0 20px 80px rgba(0,0,0,.4); }
+    .gallery-dialog::backdrop { background: rgba(9,20,17,.82); backdrop-filter: blur(3px); }
+    .gallery-dialog[open] { margin: auto; }
+    .gallery-dialog-image { display: block; width: 100%; max-height: 72vh; object-fit: contain; background: #10251f; }
+    .gallery-dialog-close { position: absolute; top: 24px; right: 24px; z-index: 1; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,.5); border-radius: 50%; background: rgba(18,45,40,.92); color: #fffdf7; font-size: 1.6rem; cursor: pointer; }
+    .gallery-dialog-caption { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 2px 0; }
+    .gallery-dialog-caption p { margin: 0; line-height: 1.5; }
+    .gallery-dialog-caption a { color: #d6be88; white-space: nowrap; font-size: .85rem; }
+    .audio-status, .share-status { min-height: 1em; font-size: .78rem; color: #d6be88; }
+    .audio-status { margin: 8px 0 0; }
+    .share-button { padding: 10px 14px; border: 1px solid rgba(214,190,136,.6); background: transparent; color: #d6be88; font: inherit; font-size: .82rem; font-weight: 750; cursor: pointer; }
+    .share-button:hover, .share-button:focus-visible { background: rgba(214,190,136,.1); }
+    .footer-share-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .share-status { margin: 0; }
+    @media (max-width: 760px) {
+      .gallery-heading { grid-template-columns: 1fr; gap: 12px; }
+      .archive-gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-open img { height: 220px; }
+      .gallery-dialog-caption { align-items: flex-start; flex-direction: column; gap: 8px; }
+    }
+    @media (max-width: 480px) {
+      .archive-gallery-grid { grid-template-columns: 1fr; }
+      .gallery-open img { height: 260px; }
+      .gallery-dialog { padding: 10px; }
+      .gallery-dialog-close { top: 15px; right: 15px; }
+    }
+
+  </style>
 </head>
 <body>
   <header class="topbar">
@@ -432,7 +475,9 @@
           <div class="hero-actions">
             <a class="btn btn-gold" href="#history">Узнать её историю <span aria-hidden="true">↓</span></a>
             <a class="btn btn-outline" href="#memory">Оставить слово памяти</a>
+            <button class="btn btn-outline" id="listen-biography" type="button">▶ Послушать биографию</button>
           </div>
+          <p class="audio-status" id="audio-status" aria-live="polite"></p>
         </div>
        <figure class="portrait-frame">
   <div
@@ -489,6 +534,56 @@
         <div class="fact"><b>1923—1941</b><span>Годы жизни Зои Космодемьянской</span></div>
         <div class="fact"><b>18 лет</b><span>Столько ей было, когда оборвалась её жизнь</span></div>
         <div class="fact"><b>16 февраля 1942</b><span>Звание Героя Советского Союза присвоено посмертно</span></div>
+      </div>
+    </section>
+
+    <section class="content-section gallery-section" id="gallery" aria-labelledby="gallery-title">
+      <div class="wrap">
+        <div class="gallery-heading">
+          <div>
+            <span class="eyebrow">Документы и образы эпохи</span>
+            <h2 id="gallery-title">Галерея памяти</h2>
+          </div>
+          <p class="section-lead">Архивные портреты и историческая публикация помогают увидеть прошлое ближе. Нажми на изображение, чтобы рассмотреть его крупнее.</p>
+        </div>
+        <div class="archive-gallery-grid">
+          <article class="gallery-card">
+            <button class="gallery-open" type="button"
+              data-full="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Zoya_Kosmodemyanskaya%2C_1941.png/960px-Zoya_Kosmodemyanskaya%2C_1941.png"
+              data-caption="Зоя Космодемьянская. Архивный портрет, около 1941 года."
+              data-source="https://commons.wikimedia.org/wiki/File:Zoya_Kosmodemyanskaya,_1941.png"
+              aria-label="Увеличить архивный портрет Зои Космодемьянской">
+              <img loading="lazy" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Zoya_Kosmodemyanskaya%2C_1941.png/960px-Zoya_Kosmodemyanskaya%2C_1941.png" alt="Архивный портрет Зои Космодемьянской">
+              <span class="gallery-caption">Архивный портрет</span>
+              <span class="gallery-description">Фотография Зои примерно 1941 года.</span>
+            </button>
+            <div class="gallery-credit"><a href="https://commons.wikimedia.org/wiki/File:Zoya_Kosmodemyanskaya,_1941.png" target="_blank" rel="noopener noreferrer">Источник изображения ↗</a></div>
+          </article>
+          <article class="gallery-card">
+            <button class="gallery-open" type="button"
+              data-full="https://upload.wikimedia.org/wikipedia/commons/5/5a/Portrait_of_Zoya_Kosmodemyanskaya.jpg"
+              data-caption="Фотопортрет Зои Космодемьянской. Не позднее 1941 года. Источник: Главархив Москвы, mos.ru, лицензия CC BY 4.0."
+              data-source="https://commons.wikimedia.org/wiki/File:Portrait_of_Zoya_Kosmodemyanskaya.jpg"
+              aria-label="Увеличить фотопортрет Зои Космодемьянской из Главархива Москвы">
+              <img loading="lazy" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/Portrait_of_Zoya_Kosmodemyanskaya.jpg/500px-Portrait_of_Zoya_Kosmodemyanskaya.jpg" alt="Фотопортрет Зои Космодемьянской из Главархива Москвы">
+              <span class="gallery-caption">Портрет из Главархива Москвы</span>
+              <span class="gallery-description">Фотопортрет, датируемый 1941 годом.</span>
+            </button>
+            <div class="gallery-credit"><a href="https://commons.wikimedia.org/wiki/File:Portrait_of_Zoya_Kosmodemyanskaya.jpg" target="_blank" rel="noopener noreferrer">Источник и лицензия ↗</a></div>
+          </article>
+          <article class="gallery-card">
+            <button class="gallery-open" type="button"
+              data-full="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Komsomolskaya-Pravda-77-1942-02-19-all_%28page_2_crop%292.jpg/960px-Komsomolskaya-Pravda-77-1942-02-19-all_%28page_2_crop%292.jpg"
+              data-caption="Фрагмент выпуска газеты «Комсомольская правда» от 19 февраля 1942 года. Источник: архивное изображение на Wikimedia Commons."
+              data-source="https://commons.wikimedia.org/wiki/File:Komsomolskaya-Pravda-77-1942-02-19-all_(page_2_crop)2.jpg"
+              aria-label="Увеличить газетную публикацию февраля 1942 года">
+              <img loading="lazy" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Komsomolskaya-Pravda-77-1942-02-19-all_%28page_2_crop%292.jpg/960px-Komsomolskaya-Pravda-77-1942-02-19-all_%28page_2_crop%292.jpg" alt="Фрагмент газетной публикации о Зое Космодемьянской, февраль 1942 года">
+              <span class="gallery-caption">Страница газеты, 1942 год</span>
+              <span class="gallery-description">Историческая публикация «Комсомольской правды» от 19 февраля 1942 года.</span>
+            </button>
+            <div class="gallery-credit"><a href="https://commons.wikimedia.org/wiki/File:Komsomolskaya-Pravda-77-1942-02-19-all_(page_2_crop)2.jpg" target="_blank" rel="noopener noreferrer">Источник и лицензия ↗</a></div>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -740,12 +835,116 @@
     <div class="wrap footer-row">
       <p class="footer-title">Связь поколений · Мы помним</p>
       <p>Учебный памятный проект · История, которую важно передать дальше</p>
+      <div class="footer-share-wrap">
+        <button class="share-button" id="share-site" type="button">Поделиться сайтом ↗</button>
+        <p class="share-status" id="share-status" aria-live="polite"></p>
+      </div>
       <a href="#top" style="color:#d6be88;text-decoration:none">Наверх ↑</a>
     </div>
   </footer>
 
+
+  <dialog class="gallery-dialog" id="gallery-dialog" aria-labelledby="gallery-dialog-caption">
+    <button class="gallery-dialog-close" id="gallery-dialog-close" type="button" aria-label="Закрыть фотографию">×</button>
+    <img class="gallery-dialog-image" id="gallery-dialog-image" alt="">
+    <div class="gallery-dialog-caption">
+      <p id="gallery-dialog-caption"></p>
+      <a id="gallery-dialog-source" href="#" target="_blank" rel="noopener noreferrer">Открыть источник ↗</a>
+    </div>
+  </dialog>
+
   <script>
     (() => {
+      // Озвучивание краткой биографии с помощью встроенного синтеза речи браузера.
+      const listenButton = document.querySelector('#listen-biography');
+      const audioStatus = document.querySelector('#audio-status');
+      const biographyNarration = 'Зоя Анатольевна Космодемьянская родилась 13 сентября 1923 года. Она была советской разведчицей-диверсанткой во время Великой Отечественной войны. Осенью 1941 года Зоя выполняла задание в тылу немецких войск. Её схватили в деревне Петрищево, а 29 ноября 1941 года казнили. 16 февраля 1942 года Зое Космодемьянской посмертно присвоили звание Героя Советского Союза. Память о её жизни и судьбе сохраняется в музеях, документах и семейных рассказах.';
+      listenButton.addEventListener('click', () => {
+        if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+          audioStatus.textContent = 'Озвучивание не поддерживается этим браузером. Попробуй открыть сайт в другом браузере.';
+          return;
+        }
+        if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+          window.speechSynthesis.cancel();
+          listenButton.textContent = '▶ Послушать биографию';
+          audioStatus.textContent = 'Рассказ остановлен.';
+          return;
+        }
+        const speech = new SpeechSynthesisUtterance(biographyNarration);
+        speech.lang = 'ru-RU';
+        speech.rate = 0.92;
+        const russianVoice = window.speechSynthesis.getVoices().find(voice => /^ru(?:-|_)/i.test(voice.lang));
+        if (russianVoice) speech.voice = russianVoice;
+        speech.onstart = () => {
+          listenButton.textContent = '■ Остановить рассказ';
+          audioStatus.textContent = 'Сейчас звучит краткая биография Зои.';
+        };
+        speech.onend = () => {
+          listenButton.textContent = '▶ Послушать биографию';
+          audioStatus.textContent = 'Рассказ завершён.';
+        };
+        speech.onerror = () => {
+          listenButton.textContent = '▶ Послушать биографию';
+          audioStatus.textContent = 'Не удалось воспроизвести рассказ. Проверь настройки звука браузера.';
+        };
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(speech);
+      });
+
+      // Просмотр галереи в увеличенном окне.
+      const galleryDialog = document.querySelector('#gallery-dialog');
+      const galleryDialogImage = document.querySelector('#gallery-dialog-image');
+      const galleryDialogCaption = document.querySelector('#gallery-dialog-caption');
+      const galleryDialogSource = document.querySelector('#gallery-dialog-source');
+      document.querySelectorAll('.gallery-open').forEach(button => {
+        button.addEventListener('click', () => {
+          galleryDialogImage.src = button.dataset.full;
+          galleryDialogImage.alt = button.querySelector('img')?.alt || '';
+          galleryDialogCaption.textContent = button.dataset.caption || '';
+          galleryDialogSource.href = button.dataset.source || '#';
+          if (typeof galleryDialog.showModal === 'function') galleryDialog.showModal();
+          else galleryDialog.setAttribute('open', '');
+        });
+      });
+      document.querySelector('#gallery-dialog-close').addEventListener('click', () => {
+        if (typeof galleryDialog.close === 'function') galleryDialog.close();
+        else galleryDialog.removeAttribute('open');
+      });
+      galleryDialog.addEventListener('click', event => {
+        if (event.target === galleryDialog) {
+          if (typeof galleryDialog.close === 'function') galleryDialog.close();
+          else galleryDialog.removeAttribute('open');
+        }
+      });
+
+      // Поделиться ссылкой с помощью системного меню или скопировать её.
+      const shareButton = document.querySelector('#share-site');
+      const shareStatus = document.querySelector('#share-status');
+      shareButton.addEventListener('click', async () => {
+        const shareUrl = 'https://brujlokosta-rgb.github.io/svyaz-pokoleniy/';
+        const shareData = {
+          title: 'Связь поколений: Мы помним — Зоя Космодемьянская',
+          text: 'Учебный памятный сайт о Зое Космодемьянской.',
+          url: shareUrl
+        };
+        if (navigator.share) {
+          try {
+            await navigator.share(shareData);
+            shareStatus.textContent = 'Ссылка готова к отправке.';
+          } catch (error) {
+            if (error.name !== 'AbortError') shareStatus.textContent = 'Не удалось открыть меню отправки. Можно скопировать ссылку из адресной строки.';
+          }
+          return;
+        }
+        try {
+          await navigator.clipboard.writeText(shareUrl);
+          shareStatus.textContent = 'Ссылка скопирована. Отправь её друзьям или учителю!';
+        } catch (_) {
+          window.prompt('Скопируй ссылку на сайт:', shareUrl);
+          shareStatus.textContent = 'Скопируй ссылку в открывшемся окне.';
+        }
+      });
+
       const menuButton = document.querySelector('.menu-toggle');
       const nav = document.querySelector('#navlinks');
       menuButton.addEventListener('click', () => {
