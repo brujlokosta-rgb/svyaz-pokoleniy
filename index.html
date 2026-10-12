@@ -293,7 +293,91 @@
   font-size: 0.72em;
   line-height: 1;
 }
-  </style>
+ .portrait-stage {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.portrait-stage:focus-visible {
+  outline: 3px solid #d6be88;
+  outline-offset: 3px;
+}
+
+.portrait-bio {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(18, 45, 40, 0.96);
+  color: #fffdf7;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.25s ease,
+              transform 0.25s ease,
+              visibility 0.25s ease;
+}
+
+.portrait-stage:hover .portrait-bio,
+.portrait-stage:focus-visible .portrait-bio,
+.portrait-stage.is-open .portrait-bio {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.portrait-bio-kicker {
+  color: #d6be88;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.portrait-bio h2 {
+  margin: 12px 0 0;
+  font-family: Georgia, serif;
+  font-size: 1.6rem;
+  line-height: 1.1;
+}
+
+.portrait-bio p {
+  margin: 14px 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: rgba(255, 253, 247, 0.9);
+}
+
+.portrait-bio-hint {
+  margin-top: auto;
+  color: #d6be88;
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portrait-bio {
+    transition: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .portrait-bio {
+    padding: 18px;
+  }
+
+  .portrait-bio h2 {
+    font-size: 1.3rem;
+  }
+
+  .portrait-bio p {
+    font-size: 0.78rem;
+  }
+}
+</style>
 </head>
 <body>
   <header class="topbar">
@@ -325,11 +409,52 @@
             <a class="btn btn-outline" href="#memory">Оставить слово памяти</a>
           </div>
         </div>
-        <figure class="portrait-frame">
-          <img class="portrait" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Zoya_Kosmodemyanskaya%2C_1941.png/960px-Zoya_Kosmodemyanskaya%2C_1941.png" alt="Архивный портрет Зои Анатольевны Космодемьянской" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
-          <div class="portrait-fallback" aria-hidden="true">Зоя<br>Космодемьянская</div>
-          <figcaption class="photo-credit">Зоя Космодемьянская · архивный портрет</figcaption>
-        </figure>
+       <figure class="portrait-frame">
+  <div
+    class="portrait-stage"
+    tabindex="0"
+    role="button"
+    aria-label="Показать краткую биографию Зои Космодемьянской"
+    aria-expanded="false"
+    onclick="this.classList.toggle('is-open'); this.setAttribute('aria-expanded', this.classList.contains('is-open'))"
+    onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}else if(event.key==='Escape'){this.classList.remove('is-open');this.setAttribute('aria-expanded','false')}"
+  >
+    <img
+      class="portrait"
+      src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Zoya_Kosmodemyanskaya%2C_1941.png/960px-Zoya_Kosmodemyanskaya%2C_1941.png"
+      alt="Архивный портрет Зои Анатольевны Космодемьянской"
+      onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"
+    >
+
+    <div class="portrait-fallback" aria-hidden="true">
+      Зоя<br>Космодемьянская
+    </div>
+
+    <div class="portrait-bio">
+      <span class="portrait-bio-kicker">КРАТКАЯ БИОГРАФИЯ</span>
+
+      <h2>Зоя Космодемьянская</h2>
+
+      <p>
+        Зоя Анатольевна Космодемьянская (1923–1941) —
+        советская разведчица-диверсантка. Осенью 1941 года,
+        во время битвы за Москву, она выполняла задание
+        в тылу немецких войск. Была схвачена в деревне
+        Петрищево и казнена 29 ноября 1941 года.
+        В мае 1942 года ей посмертно присвоили звание
+        Героя Советского Союза.
+      </p>
+
+      <span class="portrait-bio-hint">
+        Наведи курсор или нажми на фото, чтобы открыть или закрыть карточку
+      </span>
+    </div>
+  </div>
+
+  <figcaption class="photo-credit">
+    Зоя Космодемьянская · архивный портрет
+  </figcaption>
+</figure>
       </div>
       <div class="hero-caption" aria-hidden="true"><span>История одной жизни</span><span>Память, которую мы бережём</span></div>
     </section>
