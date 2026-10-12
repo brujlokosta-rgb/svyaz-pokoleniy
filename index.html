@@ -495,6 +495,108 @@
       }
     }
 
+  
+    /* Дополнительные интерактивные элементы проекта */
+    .feature-letter-section { background: var(--paper); }
+    .feature-letter-layout { display: grid; grid-template-columns: 1fr .9fr; gap: clamp(30px, 7vw, 82px); align-items: center; }
+    .feature-letter-copy .section-lead { margin-bottom: 22px; }
+    .feature-letter-note { padding: 13px 16px; border-left: 2px solid var(--gold); color: var(--muted); background: rgba(183,154,97,.09); font-size: .83rem; }
+    .envelope-scene { display: grid; place-items: center; min-height: 300px; padding: 22px; }
+    .envelope-button { position: relative; display: block; width: min(100%, 390px); height: 240px; padding: 0; border: 0; background: transparent; cursor: pointer; perspective: 900px; }
+    .envelope-base { position: absolute; inset: 42px 0 0; overflow: hidden; background: #d7c39b; border: 1px solid rgba(78,58,34,.22); box-shadow: 0 18px 28px rgba(24,52,47,.14); }
+    .envelope-base::before, .envelope-base::after { content: ""; position: absolute; bottom: 0; width: 72%; height: 100%; background: #e7d6b4; }
+    .envelope-base::before { left: -12%; clip-path: polygon(0 0, 100% 100%, 0 100%); }
+    .envelope-base::after { right: -12%; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+    .envelope-paper { position: absolute; z-index: 1; left: 8%; right: 8%; top: 18px; height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 24px; background: #fff9e9; color: #3b493f; border: 1px solid rgba(78,58,34,.22); box-shadow: 0 5px 12px rgba(24,52,47,.09); transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+    .envelope-paper strong { font: 500 1.6rem/1.2 Georgia, serif; }
+    .envelope-paper small { color: #866a36; font-size: .78rem; }
+    .envelope-flap { position: absolute; z-index: 3; top: 42px; left: 0; width: 100%; height: 120px; transform-origin: top center; transform: rotateX(0); backface-visibility: visible; transition: transform .55s ease; clip-path: polygon(0 0, 100% 0, 50% 100%); background: #cbb184; }
+    .envelope-seal { position: absolute; z-index: 4; top: 104px; left: 50%; display: grid; place-items: center; width: 38px; height: 38px; transform: translateX(-50%); border-radius: 50%; border: 1px solid #a63a32; color: #fff3d8; background: #9d3e34; box-shadow: 0 3px 8px rgba(0,0,0,.15); transition: opacity .2s ease, transform .25s ease; }
+    .envelope-button:hover .envelope-paper, .envelope-button:focus-visible .envelope-paper { transform: translateY(-5px); }
+    .envelope-button.is-open .envelope-flap { transform: rotateX(180deg); }
+    .envelope-button.is-open .envelope-paper { transform: translateY(-54px); }
+    .envelope-button.is-open .envelope-seal { opacity: 0; transform: translate(-50%, 10px) scale(.8); }
+    .envelope-button:focus-visible { outline: 3px solid #b79a61; outline-offset: 8px; }
+    .envelope-button-hint { position: absolute; left: 0; right: 0; bottom: -9px; z-index: 5; color: #5b4830; font-size: .75rem; font-weight: 750; text-align: center; }
+    .letter-content { max-width: 850px; margin: 15px auto 0; padding: clamp(24px, 5vw, 48px); border: 1px solid rgba(183,154,97,.55); background: #fff9e9; color: #303d35; box-shadow: 0 18px 44px rgba(24,52,47,.08); opacity: 0; transform: translateY(12px); transition: opacity .3s ease, transform .3s ease; }
+    .letter-content[hidden] { display: none; }
+    .letter-content.is-visible { opacity: 1; transform: translateY(0); }
+    .letter-content-label { color: #8f6d35; font-size: .7rem; font-weight: 850; letter-spacing: .13em; text-transform: uppercase; }
+    .letter-content h3 { margin: 12px 0 18px; font: 500 clamp(1.8rem, 4vw, 2.45rem)/1.15 Georgia, serif; }
+    .letter-content p { max-width: 720px; color: #4a554d; line-height: 1.85; }
+    .letter-signoff { margin-bottom: 0; font-family: Georgia, serif; font-size: 1.12rem; }
+    .letter-caveat { margin: 20px 0 0; padding-top: 14px; border-top: 1px solid rgba(78,58,34,.18); color: #816d4e; font-size: .78rem; }
+    .letter-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 38px; padding: 8px 11px; border: 1px solid var(--line); border-radius: 3px; background: transparent; color: var(--ink); cursor: pointer; font-size: .78rem; font-weight: 750; white-space: nowrap; }
+    .theme-toggle:hover, .theme-toggle:focus-visible { border-color: var(--gold); background: rgba(183,154,97,.1); }
+    .minute-dialog { width: min(720px, calc(100% - 28px)); max-width: none; max-height: 92vh; overflow: auto; margin: auto; padding: 0; border: 1px solid rgba(214,190,136,.65); background: #101c18; color: #f7f0df; box-shadow: 0 24px 90px rgba(0,0,0,.55); }
+    .minute-dialog::backdrop { background: rgba(5,12,10,.86); backdrop-filter: blur(5px); }
+    .minute-inner { position: relative; display: flex; min-height: 540px; flex-direction: column; align-items: center; justify-content: center; padding: 48px 30px 38px; text-align: center; }
+    .minute-close { position: absolute; top: 13px; right: 14px; width: 42px; height: 42px; border: 1px solid rgba(255,255,255,.25); border-radius: 50%; background: transparent; color: #f7f0df; font-size: 1.6rem; cursor: pointer; }
+    .minute-kicker { margin: 0 0 14px; color: #d6be88; font-size: .72rem; font-weight: 850; letter-spacing: .2em; text-transform: uppercase; }
+    .minute-inner h2 { max-width: 520px; margin: 0 0 15px; color: #fff9ec; font-size: clamp(2.2rem, 6vw, 3.5rem); }
+    .minute-message { max-width: 490px; margin: 0 auto 24px; color: rgba(255,249,236,.72); }
+    .memorial-candle { position: relative; width: 84px; height: 154px; margin: 5px auto 26px; }
+    .memorial-candle-body { position: absolute; left: 18px; bottom: 0; width: 48px; height: 94px; border-radius: 7px 7px 4px 4px; background: linear-gradient(90deg,#b9a77e,#fbefcf 28%,#e9d8ad 70%,#9d875c); box-shadow: inset 0 -8px 12px rgba(63,44,21,.12), 0 0 30px rgba(214,190,136,.13); }
+    .memorial-candle-body::before { content: ""; position: absolute; top: 7px; left: 7px; width: 2px; height: 36px; background: rgba(255,255,255,.55); }
+    .memorial-candle-wick { position: absolute; z-index: 2; top: 47px; left: 40px; width: 4px; height: 14px; border-radius: 2px; background: #29221b; }
+    .memorial-flame { position: absolute; z-index: 3; top: 5px; left: 27px; width: 30px; height: 47px; border-radius: 60% 40% 55% 45%; background: radial-gradient(ellipse at 50% 70%, #fff9cf 0 14%, #f6c766 42%, #d67532 70%, rgba(191,82,34,.1) 100%); transform-origin: 50% 90%; filter: drop-shadow(0 0 15px rgba(245,166,65,.7)); animation: memorial-flicker 2.1s ease-in-out infinite alternate; }
+    @keyframes memorial-flicker { 0% { transform: rotate(-3deg) scale(.95,1); opacity: .92; } 45% { transform: rotate(2deg) scale(1.04,.97); opacity: 1; } 100% { transform: rotate(-1deg) scale(.97,1.05); opacity: .94; } }
+    .minute-timer { margin: 0 0 22px; color: #d6be88; font: 500 2.5rem/1 Georgia, serif; font-variant-numeric: tabular-nums; }
+    .minute-status { min-height: 1.5em; margin: 18px 0 0; color: rgba(255,249,236,.65); font-size: .8rem; }
+    .minute-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+    .minute-actions .btn-outline { border-color: rgba(214,190,136,.45); }
+    body.dark-theme {
+      --ink: #ece6d8; --forest: #0f211b; --forest-2: #1c3b31;
+      --cream: #101b17; --paper: #1a2923; --muted: #b4c0b7;
+      --red: #e19a8d; --gold: #d6be88; --line: rgba(236,230,216,.17);
+      --shadow: 0 22px 60px rgba(0,0,0,.32);
+    }
+    body.dark-theme .topbar { background: rgba(16,27,23,.94); border-color: rgba(236,230,216,.12); }
+    body.dark-theme .navlinks a:not(.nav-cta) { color: #e0e6dd; }
+    body.dark-theme .navlinks a:not(.nav-cta):hover { color: #e6c98d; }
+    body.dark-theme .navlinks { background: var(--cream); }
+    body.dark-theme .nav-cta { background: #28483d; }
+    body.dark-theme .facts { background: #182720; }
+    body.dark-theme .gallery-section, body.dark-theme .places-section, body.dark-theme .quiz-section { background: #13221c; }
+    body.dark-theme .life-section, body.dark-theme .glossary-section { background: #101b17; }
+    body.dark-theme .family-section { background: #1a2923; }
+    body.dark-theme .gallery-card, body.dark-theme .life-card, body.dark-theme .place-card,
+    body.dark-theme .quiz-form, body.dark-theme .family-form, body.dark-theme .story-aside,
+    body.dark-theme .reading-card { background: #1b2b24; border-color: var(--line); }
+    body.dark-theme .gallery-caption, body.dark-theme .place-body h3, body.dark-theme .life-card h3,
+    body.dark-theme .family-form h3, body.dark-theme .quiz-question legend, body.dark-theme .glossary-item dt { color: #f1eadb; }
+    body.dark-theme .gallery-description, body.dark-theme .place-body p, body.dark-theme .life-card p,
+    body.dark-theme .family-form > p, body.dark-theme .family-step p, body.dark-theme .glossary-item dd,
+    body.dark-theme .reading-card p { color: #bac5bc; }
+    body.dark-theme .family-form label { color: #e6dcc8; }
+    body.dark-theme .family-form input, body.dark-theme .family-form textarea { background: #12211b; color: #f1eadb; }
+    body.dark-theme .quiz-option { color: #e5e9e1; border-color: rgba(236,230,216,.16); }
+    body.dark-theme .quiz-option:hover { background: #223b30; }
+    body.dark-theme .quiz-score, body.dark-theme .quiz-feedback, body.dark-theme .family-status { color: #e0c88e !important; }
+    body.dark-theme .quiz-option.correct { background: #203c2b; border-color: #719780; }
+    body.dark-theme .quiz-option.incorrect { background: #452724; border-color: #c98c82; }
+    body.dark-theme .meaning-card { background: #1b2b24; border-color: var(--line); }
+    body.dark-theme .glossary-list, body.dark-theme .glossary-item { border-color: var(--line); }
+    body.dark-theme .source-links a { color: #e0e6dd; border-color: var(--line); }
+    body.dark-theme .source-caption { color: #bac5bc; }
+    body.dark-theme .family-step > span { color: #e19a8d; }
+    body.dark-theme .theme-toggle { color: #f1eadb; border-color: rgba(236,230,216,.23); }
+    @media (max-width: 820px) {
+      .feature-letter-layout { grid-template-columns: 1fr; gap: 18px; }
+      .envelope-scene { min-height: 255px; }
+      .theme-toggle { width: 100%; margin-top: 8px; padding: 12px; }
+    }
+    @media (max-width: 560px) {
+      .minute-inner { min-height: 500px; padding: 54px 20px 28px; }
+      .envelope-button { height: 220px; }
+      .envelope-paper { height: 164px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .memorial-flame { animation: none !important; }
+      .envelope-flap, .envelope-paper, .letter-content { transition: none !important; }
+    }
+
   </style>
 </head>
 <body>
@@ -508,10 +610,12 @@
       <nav class="navlinks" id="navlinks" aria-label="Основная навигация">
         <a href="#history">Биография</a>
         <a href="#gallery">Галерея</a>
+        <a href="#letter">Письмо</a>
         <a href="#timeline">Хронология</a>
         <a href="#places">Памятные места</a>
         <a href="#quiz">Викторина</a>
         <a class="nav-cta" href="#memory">Стена памяти ↗</a>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">☾ Тёмная тема</button>
       </nav>
     </div>
   </header>
@@ -597,6 +701,39 @@
         <div class="fact"><b>18 лет</b><span>Столько ей было, когда оборвалась её жизнь</span></div>
         <div class="fact"><b>16 февраля 1942</b><span>Звание Героя Советского Союза присвоено посмертно</span></div>
       </div>
+    </section>
+
+    <section class="content-section feature-letter-section" id="letter" aria-labelledby="letter-title">
+      <div class="wrap feature-letter-layout">
+        <div class="feature-letter-copy">
+          <span class="eyebrow">Послание через время</span>
+          <h2 id="letter-title">Письмо из прошлого</h2>
+          <p class="section-lead">Иногда история ощущается ближе, когда мы представляем, что могли бы сказать будущим поколениям люди, пережившие войну.</p>
+          <p class="feature-letter-note"><strong>Важное уточнение:</strong> текст ниже — художественная реконструкция, написанная для этого учебного проекта. Это не подлинное письмо Зои Космодемьянской и не её историческая цитата.</p>
+          <div class="letter-actions">
+            <button class="btn btn-gold" id="letter-toggle" type="button" aria-expanded="false" aria-controls="letter-content">✉ Открыть письмо</button>
+            <button class="btn btn-outline" id="minute-memory-open" type="button">🕯 Минута памяти</button>
+          </div>
+        </div>
+        <div class="envelope-scene">
+          <button class="envelope-button" id="envelope-button" type="button" aria-expanded="false" aria-controls="letter-content" aria-label="Открыть художественное письмо потомкам">
+            <span class="envelope-paper" aria-hidden="true"><strong>Письмо потомкам</strong><small>Память · Мужество · Мир</small></span>
+            <span class="envelope-base" aria-hidden="true"></span>
+            <span class="envelope-flap" aria-hidden="true"></span>
+            <span class="envelope-seal" aria-hidden="true">✦</span>
+            <span class="envelope-button-hint">Нажми, чтобы открыть конверт</span>
+          </button>
+        </div>
+      </div>
+      <article class="letter-content" id="letter-content" hidden>
+        <span class="letter-content-label">Художественная реконструкция · не подлинный документ</span>
+        <h3>Дорогие потомки!</h3>
+        <p>Когда вы обращаетесь к истории Великой Отечественной войны, постарайтесь увидеть за датами живых людей: их семьи, мечты, страхи и надежды. Для многих юношей и девушек война наступила в самом начале взрослой жизни.</p>
+        <p>Память — это не только памятники и торжественные слова. Это желание узнавать правду, бережно относиться к документам, слушать рассказы старших и сохранять имена тех, чьи судьбы были опалены войной.</p>
+        <p>Пусть интерес к прошлому помогает вам ценить мир, поддерживать друг друга и передавать семейные истории следующим поколениям. Не придумывайте неизвестных фактов — лучше честно отмечайте, что удалось узнать, и продолжайте искать.</p>
+        <p class="letter-signoff">С уважением — авторы этого учебного проекта «Связь поколений: Мы помним».</p>
+        <p class="letter-caveat">Этот текст создан современным автором как литературное размышление о памяти. Он не является историческим источником и не приписывается Зое Космодемьянской.</p>
+      </article>
     </section>
 
     <section class="content-section gallery-section" id="gallery" aria-labelledby="gallery-title">
@@ -906,6 +1043,26 @@
   </footer>
 
 
+  <dialog class="minute-dialog" id="minute-dialog" aria-labelledby="minute-dialog-title">
+    <div class="minute-inner">
+      <button class="minute-close" id="minute-dialog-close" type="button" aria-label="Закрыть окно минуты памяти">×</button>
+      <p class="minute-kicker">Связь поколений · Мы помним</p>
+      <div class="memorial-candle" aria-hidden="true">
+        <span class="memorial-flame"></span>
+        <span class="memorial-candle-wick"></span>
+        <span class="memorial-candle-body"></span>
+      </div>
+      <h2 id="minute-dialog-title">Минута памяти</h2>
+      <p class="minute-message">Почтим память Зои Космодемьянской и всех, чьи жизни унесла война. Пусть тишина станет знаком благодарности и стремления беречь мир.</p>
+      <p class="minute-timer" id="minute-timer" aria-live="polite">01:00</p>
+      <div class="minute-actions">
+        <button class="btn btn-gold" id="minute-start" type="button">Начать минуту тишины</button>
+        <button class="btn btn-outline" id="minute-finish" type="button">Закрыть</button>
+      </div>
+      <p class="minute-status" id="minute-status" aria-live="polite">Когда будешь готов, нажми «Начать минуту тишины».</p>
+    </div>
+  </dialog>
+
   <dialog class="gallery-dialog" id="gallery-dialog" aria-labelledby="gallery-dialog-caption">
     <button class="gallery-dialog-close" id="gallery-dialog-close" type="button" aria-label="Закрыть фотографию">×</button>
     <img class="gallery-dialog-image" id="gallery-dialog-image" alt="">
@@ -1058,6 +1215,107 @@
         });
       });
 
+      // Переключение музейного оформления с сохранением выбора посетителя.
+      const themeToggle = document.querySelector('#theme-toggle');
+      function applyTheme(isDark) {
+        document.body.classList.toggle('dark-theme', isDark);
+        themeToggle.setAttribute('aria-pressed', String(isDark));
+        themeToggle.textContent = isDark ? '☀ Светлая тема' : '☾ Тёмная тема';
+      }
+      let savedDarkTheme = false;
+      try { savedDarkTheme = localStorage.getItem('svyaz-pokoleniy-theme') === 'dark'; } catch (_) {}
+      applyTheme(savedDarkTheme);
+      themeToggle.addEventListener('click', () => {
+        const isDark = !document.body.classList.contains('dark-theme');
+        applyTheme(isDark);
+        try { localStorage.setItem('svyaz-pokoleniy-theme', isDark ? 'dark' : 'light'); } catch (_) {}
+      });
+
+      // Интерактивный конверт с художественным, не историческим письмом.
+      const letterToggle = document.querySelector('#letter-toggle');
+      const envelopeButton = document.querySelector('#envelope-button');
+      const letterContent = document.querySelector('#letter-content');
+      let letterCloseTimer = null;
+      function setLetterOpen(open) {
+        window.clearTimeout(letterCloseTimer);
+        letterToggle.setAttribute('aria-expanded', String(open));
+        envelopeButton.setAttribute('aria-expanded', String(open));
+        envelopeButton.classList.toggle('is-open', open);
+        letterToggle.textContent = open ? '✉ Свернуть письмо' : '✉ Открыть письмо';
+        if (open) {
+          letterContent.hidden = false;
+          window.requestAnimationFrame(() => letterContent.classList.add('is-visible'));
+          letterContent.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
+        } else {
+          letterContent.classList.remove('is-visible');
+          letterCloseTimer = window.setTimeout(() => { letterContent.hidden = true; }, 310);
+        }
+      }
+      letterToggle.addEventListener('click', () => setLetterOpen(letterToggle.getAttribute('aria-expanded') !== 'true'));
+      envelopeButton.addEventListener('click', () => setLetterOpen(envelopeButton.getAttribute('aria-expanded') !== 'true'));
+
+      // Экран «Минута памяти» со свечой и отсчётом 60 секунд.
+      const minuteDialog = document.querySelector('#minute-dialog');
+      const minuteOpen = document.querySelector('#minute-memory-open');
+      const minuteClose = document.querySelector('#minute-dialog-close');
+      const minuteStart = document.querySelector('#minute-start');
+      const minuteFinish = document.querySelector('#minute-finish');
+      const minuteTimerDisplay = document.querySelector('#minute-timer');
+      const minuteStatus = document.querySelector('#minute-status');
+      let minuteInterval = null;
+      let minuteRemaining = 60;
+      function renderMinuteTimer() {
+        const mins = String(Math.floor(minuteRemaining / 60)).padStart(2, '0');
+        const secs = String(minuteRemaining % 60).padStart(2, '0');
+        minuteTimerDisplay.textContent = mins + ':' + secs;
+      }
+      function stopMinuteTimer(reset) {
+        if (minuteInterval !== null) {
+          window.clearInterval(minuteInterval);
+          minuteInterval = null;
+        }
+        minuteStart.disabled = false;
+        minuteStart.textContent = reset ? 'Начать минуту тишины' : 'Начать снова';
+        if (reset) {
+          minuteRemaining = 60;
+          renderMinuteTimer();
+        }
+      }
+      minuteOpen.addEventListener('click', () => {
+        stopMinuteTimer(true);
+        minuteStatus.textContent = 'Когда будешь готов, нажми «Начать минуту тишины».';
+        if (typeof minuteDialog.showModal === 'function') minuteDialog.showModal();
+        else minuteDialog.setAttribute('open', '');
+      });
+      minuteStart.addEventListener('click', () => {
+        if (minuteInterval !== null) return;
+        if (minuteRemaining <= 0) minuteRemaining = 60;
+        minuteStart.disabled = true;
+        minuteStart.textContent = 'Минута тишины…';
+        minuteStatus.textContent = 'Побудь минуту в тишине, вспоминая тех, кто пережил войну.';
+        renderMinuteTimer();
+        minuteInterval = window.setInterval(() => {
+          minuteRemaining -= 1;
+          renderMinuteTimer();
+          if (minuteRemaining <= 0) {
+            stopMinuteTimer(false);
+            minuteStart.disabled = false;
+            minuteStart.textContent = 'Пройти ещё раз';
+            minuteStatus.textContent = 'Минута памяти завершена. Спасибо, что сохраняешь память.';
+          }
+        }, 1000);
+      });
+      function closeMinuteDialog() {
+        stopMinuteTimer(true);
+        minuteStatus.textContent = 'Когда будешь готов, нажми «Начать минуту тишины».';
+        if (typeof minuteDialog.close === 'function') minuteDialog.close();
+        else minuteDialog.removeAttribute('open');
+      }
+      minuteClose.addEventListener('click', closeMinuteDialog);
+      minuteFinish.addEventListener('click', closeMinuteDialog);
+      minuteDialog.addEventListener('close', () => stopMinuteTimer(true));
+      minuteDialog.addEventListener('click', event => { if (event.target === minuteDialog) closeMinuteDialog(); });
+
       const menuButton = document.querySelector('.menu-toggle');
       const nav = document.querySelector('#navlinks');
       menuButton.addEventListener('click', () => {
@@ -1203,6 +1461,7 @@
       if ('IntersectionObserver' in window && !reduceMotion) {
         const revealTargets = document.querySelectorAll(
           '.hero-grid > div, .portrait-frame, .hero-caption, .facts-grid .fact, ' +
+          '.feature-letter-copy, .envelope-scene, ' +
           '.story-aside, .story-copy, .life-card, .timeline-item, .meaning-card, ' +
           '.gallery-heading, .gallery-card, .place-card, .glossary-item, ' +
           '.family-step, .family-form, .quiz-intro, .quiz-question, .memory-form, .source-links'
