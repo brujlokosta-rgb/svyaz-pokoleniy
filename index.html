@@ -777,7 +777,6 @@
           <p class="feature-letter-note"><strong>Важное уточнение:</strong> текст ниже — художественная реконструкция, написанная для этого учебного проекта. Это не подлинное письмо Зои Космодемьянской и не её историческая цитата.</p>
           <div class="letter-actions">
             <button class="btn btn-gold" id="letter-toggle" type="button" aria-expanded="false" aria-controls="letter-content">✉ Открыть письмо</button>
-            <button class="btn btn-outline" id="minute-memory-open" type="button">🕯 Минута памяти</button>
           </div>
         </div>
         <div class="envelope-scene">
@@ -1334,7 +1333,6 @@
 
       // Экран «Минута памяти» со свечой и отсчётом 60 секунд.
       const minuteDialog = document.querySelector('#minute-dialog');
-      const minuteOpen = document.querySelector('#minute-memory-open');
       const minuteClose = document.querySelector('#minute-dialog-close');
       const minuteStart = document.querySelector('#minute-start');
       const minuteFinish = document.querySelector('#minute-finish');
@@ -1365,7 +1363,6 @@
         if (typeof minuteDialog.showModal === 'function') minuteDialog.showModal();
         else minuteDialog.setAttribute('open', '');
       }
-      minuteOpen.addEventListener('click', openMinuteMemory);
       document.querySelector('#closing-minute-open').addEventListener('click', openMinuteMemory);
       minuteStart.addEventListener('click', () => {
         if (minuteInterval !== null) return;
