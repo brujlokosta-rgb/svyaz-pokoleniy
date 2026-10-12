@@ -882,10 +882,12 @@
       let selectedVoiceMode = 'narrator';
       const biographyNarration = 'Зоя Анатольевна Космодемьянская родилась 13 сентября 1923 года. Она была советской разведчицей-диверсанткой во время Великой Отечественной войны. Осенью 1941 года Зоя выполняла задание в тылу немецких войск. Её схватили в деревне Петрищево, а 29 ноября 1941 года казнили. 16 февраля 1942 года Зое Космодемьянской посмертно присвоили звание Героя Советского Союза. Память о её жизни и судьбе сохраняется в музеях, документах и семейных рассказах.';
       const voicePreviewText = 'Зоя Космодемьянская. Мы помним её мужество и сохраняем историю для будущих поколений.';
+      const masculineVoiceName = /(?:^|[^a-z])(male|pavel|paul|dmitri|dmitry|yuri|yuriy|alexander|alexandr|maxim|sergey|sergei|nikolai|ivan|boris)(?:$|[^a-z])/i;
+      const feminineVoiceName = /(?:^|[^a-z])(female|irina|elena|anna|milena|svetlana|darina|natasha|yulia|julia|katya|olga)(?:$|[^a-z])/i;
       const voiceProfiles = {
-        female: { rate: 0.94, pitch: 1.12, names: /female|irina|elena|anna|milena|svetlana|darina|natasha|yulia|julia|katya|olga|алла/i },
-        male: { rate: 0.90, pitch: 0.82, names: /male|pavel|paul|dmitri|dmitry|yuri|yuriy|alexander|alexandr|maxim|sergey|sergei|nikolai|ivan|boris/i },
-        narrator: { rate: 0.82, pitch: 0.93, names: /male|pavel|paul|dmitri|dmitry|yuri|yuriy|alexander|alexandr|maxim|sergey|sergei|nikolai|ivan|boris/i }
+        female: { rate: 0.94, pitch: 1.12, names: feminineVoiceName },
+        male: { rate: 0.88, pitch: 0.78, names: masculineVoiceName },
+        narrator: { rate: 0.74, pitch: 0.72, names: masculineVoiceName }
       };
       function buildRussianSpeech(text, mode) {
         const profile = voiceProfiles[mode] || voiceProfiles.narrator;
@@ -895,8 +897,11 @@
         speech.pitch = profile.pitch;
         const voices = window.speechSynthesis.getVoices();
         const russianVoices = voices.filter(voice => /^ru(?:-|_|$)/i.test(voice.lang));
-        const preferredVoice = russianVoices.find(voice => profile.names.test(voice.name))
-          || (mode === 'narrator' ? russianVoices.find(voice => voiceProfiles.male.names.test(voice.name)) : null)
+        const matchingVoice = russianVoices.find(voice => profile.names.test(voice.name));
+        const preferredVoice = matchingVoice
+          || (mode === 'narrator' ? russianVoices.find(voice => masculineVoiceName.test(voice.name) && !feminineVoiceName.test(voice.name)) : null)
+          || (mode === 'male' ? russianVoices.find(voice => masculineVoiceName.test(voice.name) && !feminineVoiceName.test(voice.name)) : null)
+          || russianVoices.find(voice => !feminineVoiceName.test(voice.name))
           || russianVoices[0]
           || voices.find(voice => /^ru/i.test(voice.lang));
         if (preferredVoice) speech.voice = preferredVoice;
