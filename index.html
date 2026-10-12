@@ -477,8 +477,10 @@
             <a class="btn btn-gold" href="#history">Узнать её историю <span aria-hidden="true">↓</span></a>
             <a class="btn btn-outline" href="#memory">Оставить слово памяти</a>
             <button class="btn btn-outline" id="listen-biography" type="button">▶ Послушать биографию</button>
+            <button class="btn btn-outline share-site-button" id="share-site-top" data-status-target="#share-status-top" type="button">↗ Поделиться сайтом</button>
           </div>
           <p class="audio-status" id="audio-status" aria-live="polite"></p>
+          <p class="share-status" id="share-status-top" aria-live="polite"></p>
         </div>
        <figure class="portrait-frame">
   <div
@@ -837,7 +839,7 @@
       <p class="footer-title">Связь поколений · Мы помним</p>
       <p>Учебный памятный проект · История, которую важно передать дальше</p>
       <div class="footer-share-wrap">
-        <button class="share-button" id="share-site" type="button">Поделиться сайтом ↗</button>
+        <button class="share-button share-site-button" id="share-site" data-status-target="#share-status" type="button">Поделиться сайтом ↗</button>
         <p class="share-status" id="share-status" aria-live="polite"></p>
       </div>
       <a href="#top" style="color:#d6be88;text-decoration:none">Наверх ↑</a>
@@ -919,31 +921,32 @@
       });
 
       // Поделиться ссылкой с помощью системного меню или скопировать её.
-      const shareButton = document.querySelector('#share-site');
-      const shareStatus = document.querySelector('#share-status');
-      shareButton.addEventListener('click', async () => {
-        const shareUrl = 'https://brujlokosta-rgb.github.io/svyaz-pokoleniy/';
-        const shareData = {
-          title: 'Связь поколений: Мы помним — Зоя Космодемьянская',
-          text: 'Учебный памятный сайт о Зое Космодемьянской.',
-          url: shareUrl
-        };
-        if (navigator.share) {
-          try {
-            await navigator.share(shareData);
-            shareStatus.textContent = 'Ссылка готова к отправке.';
-          } catch (error) {
-            if (error.name !== 'AbortError') shareStatus.textContent = 'Не удалось открыть меню отправки. Можно скопировать ссылку из адресной строки.';
+      document.querySelectorAll('.share-site-button').forEach(shareButton => {
+        const shareStatus = document.querySelector(shareButton.dataset.statusTarget);
+        shareButton.addEventListener('click', async () => {
+          const shareUrl = 'https://brujlokosta-rgb.github.io/svyaz-pokoleniy/';
+          const shareData = {
+            title: 'Связь поколений: Мы помним — Зоя Космодемьянская',
+            text: 'Учебный памятный сайт о Зое Космодемьянской.',
+            url: shareUrl
+          };
+          if (navigator.share) {
+            try {
+              await navigator.share(shareData);
+              shareStatus.textContent = 'Ссылка готова к отправке.';
+            } catch (error) {
+              if (error.name !== 'AbortError') shareStatus.textContent = 'Не удалось открыть меню отправки. Можно скопировать ссылку из адресной строки.';
+            }
+            return;
           }
-          return;
-        }
-        try {
-          await navigator.clipboard.writeText(shareUrl);
-          shareStatus.textContent = 'Ссылка скопирована. Отправь её друзьям или учителю!';
-        } catch (_) {
-          window.prompt('Скопируй ссылку на сайт:', shareUrl);
-          shareStatus.textContent = 'Скопируй ссылку в открывшемся окне.';
-        }
+          try {
+            await navigator.clipboard.writeText(shareUrl);
+            shareStatus.textContent = 'Ссылка скопирована. Отправь её друзьям или учителю!';
+          } catch (_) {
+            window.prompt('Скопируй ссылку на сайт:', shareUrl);
+            shareStatus.textContent = 'Скопируй ссылку в открывшемся окне.';
+          }
+        });
       });
 
       const menuButton = document.querySelector('.menu-toggle');
