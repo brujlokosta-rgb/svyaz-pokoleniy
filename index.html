@@ -482,6 +482,39 @@
       filter: grayscale(.78) sepia(.20) contrast(1.07);
       transform: scale(1.025);
     }
+
+    /* Кинематографичное появление фотографий при прокрутке */
+    .gallery-card.scroll-reveal .gallery-open img,
+    .place-card.scroll-reveal .place-image,
+    .portrait-frame.scroll-reveal .portrait-stage > .portrait {
+      transition: transform 1s cubic-bezier(.2,.7,.2,1), filter .9s ease;
+    }
+    .gallery-card.scroll-reveal:not(.is-visible) .gallery-open img,
+    .place-card.scroll-reveal:not(.is-visible) .place-image,
+    .portrait-frame.scroll-reveal:not(.is-visible) .portrait-stage > .portrait {
+      transform: scale(1.09);
+      filter: grayscale(1) sepia(.16) blur(4px) brightness(.82);
+    }
+    .gallery-card.scroll-reveal.is-visible .gallery-open img,
+    .place-card.scroll-reveal.is-visible .place-image {
+      transform: scale(1);
+      filter: grayscale(1) sepia(.1) blur(0) brightness(1);
+    }
+    .portrait-frame.scroll-reveal.is-visible .portrait-stage > .portrait {
+      transform: scale(1);
+      filter: grayscale(1) sepia(.12) contrast(1.04);
+    }
+    .gallery-card.scroll-reveal.is-visible .gallery-open:hover img,
+    .gallery-card.scroll-reveal.is-visible .gallery-open:focus-visible img {
+      filter: grayscale(.35) sepia(.1);
+    }
+    .place-card.scroll-reveal.is-visible:hover .place-image {
+      transform: scale(1.035);
+    }
+    .portrait-frame.scroll-reveal.is-visible:hover .portrait-stage > .portrait {
+      filter: grayscale(.78) sepia(.20) contrast(1.07);
+      transform: scale(1.025);
+    }
     @media (prefers-reduced-motion: reduce) {
       .scroll-reveal, .scroll-reveal.is-visible,
       .gallery-card, .life-card, .place-card,
@@ -1554,7 +1587,13 @@
 
         revealTargets.forEach((element, index) => {
           element.classList.add('scroll-reveal');
-          element.style.setProperty('--reveal-delay', (index % 4) * 65 + 'ms');
+          const photoGrid = element.matches('.gallery-card, .place-card') ? element.parentElement : null;
+          const photoSelector = element.matches('.gallery-card') ? '.gallery-card' : '.place-card';
+          const photoSiblings = photoGrid ? Array.from(photoGrid.children).filter(item => item.matches(photoSelector)) : [];
+          const delay = photoSiblings.length > 1
+            ? photoSiblings.indexOf(element) * 145
+            : (index % 4) * 65;
+          element.style.setProperty('--reveal-delay', delay + 'ms');
           revealObserver.observe(element);
         });
       }
